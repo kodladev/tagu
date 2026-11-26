@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+type
+*.d.ts
+bench/pages
+bench/.compare

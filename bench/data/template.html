@@ -1,0 +1,37 @@
+<script>
+  let { items = [], selected = null, onpick } = $props();
+  const visible = $derived(items.filter(item => item.price > 0 && !item.hidden));
+</script>
+
+<section class="list" class:empty={visible.length === 0} {...rest}>
+  <header>
+    <h2 title="Tom &amp; Jerry">{title} ({visible.length})</h2>
+    <button type="button" disabled={visible.length < 2} @click={() => sort(a => a.price > 10)}>
+      Sort
+    </button>
+  </header>
+
+  {#if visible.length > 0}
+    <ul role="listbox" aria-activedescendant={selected?.id}>
+      {#each visible as item, index (item.id)}
+        <li
+          id={item.id}
+          class:active={selected === item}
+          data-index={index}
+          on:click|once={() => onpick?.(item)}
+        >
+          <img src={item.image} alt="" width=48 height=48>
+          <span class='name'>{item.name}</span>
+          <small>{item.price < 100 ? "cheap" : "dear"}</small>
+        </li>
+      {/each}
+    </ul>
+  {:else}
+    <p class="hint">Nothing here yet.<br>Add an item to start.</p>
+  {/if}
+</section>
+
+<style>
+  .list > header { display: flex }
+  .empty::after { content: "<empty>" }
+</style>
